@@ -1,0 +1,18 @@
+{
+  "Outputs" : {
+    "classLabel" : {
+      "MLFeatureShortDescription" : "Most likely symbol"
+    },
+    "classLabelProbs" : {
+      "MLFeatureShortDescription" : "Probability scores for each symbol"
+    }
+  },
+  "Inputs" : {
+    "drawing" : {
+      "MLFeatureShortDescription" : "Input drawing to be classified"
+    }
+  },
+  "TrainingInputs" : {
+
+  }
+}

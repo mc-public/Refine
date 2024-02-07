@@ -1,0 +1,10 @@
+{
+  "MLModelVersionStringKey" : "0.95",
+  "MLModelDescriptionKey" : "Detects the most likely LaTeX mathematical symbol                            corresponding to a drawing.",
+  "MLModelCreatorDefinedKey" : {
+    "com.github.apple.coremltools.version" : "4.0b3",
+    "com.github.apple.coremltools.source" : "torch==1.6.0"
+  },
+  "MLModelAuthorKey" : "Venkata S Govindarajan",
+  "MLModelLicenseKey" : "MIT License"
+}

@@ -1,0 +1,24 @@
+{
+    "fileFormatVersion": "1.0.0",
+    "itemInfoEntries": {
+        "46907EEE-B771-4EEA-BF4A-AACE8A8D91DC": {
+            "author": "com.apple.CoreML",
+            "description": "CoreML Model Specification",
+            "name": "deTeX.mlmodel",
+            "path": "com.apple.CoreML/deTeX.mlmodel"
+        },
+        "536563B8-69E9-48DD-A1EC-DBBA99944EB3": {
+            "author": "com.apple.CoreML",
+            "description": "External FeatureDescription Overlay",
+            "name": "FeatureDescriptions.json",
+            "path": "com.apple.CoreML/FeatureDescriptions.json"
+        },
+        "A77EB501-DA3A-4F1A-87E1-A1A100A6FB50": {
+            "author": "com.apple.CoreML",
+            "description": "External Metadata Overlay",
+            "name": "Metadata.json",
+            "path": "com.apple.CoreML/Metadata.json"
+        }
+    },
+    "rootModelIdentifier": "46907EEE-B771-4EEA-BF4A-AACE8A8D91DC"
+}
