@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 孟超 on 2024/2/6.
 //
@@ -72,58 +72,79 @@ struct Symbol: Codable, Identifiable {
 @MainActor
 class Symbols: ObservableObject {
     
-    var allSymbols: [String: Symbol] = [:]
-    var isFetchedAllSymbols = false
+    private var allSymbols: [String: Symbol] = [:]
+    private var isFetchedAllSymbols = false
+    private var isLoadingSymbols: Bool = true
     
     static let share = Symbols()
     
-    private init() {}
+    private init() {
+        Task {
+            await self.loadAllSymbols()
+            self.isLoadingSymbols = false /*directly load*/
+        }
+    }
     
-    func loadAllSymbols() async {
+    func fetchSymbol(id: String) -> Symbol? {
+        return self.allSymbols[id]
+    }
+    
+    func fetchSymbol(id: String) async -> Symbol? {
+        await self.waitFetchedResult()
+        return self.allSymbols[id]
+    }
+    
+    func waitFetchedResult() async {
+        while self.isLoadingSymbols {
+            try? await Task.sleep(nanoseconds: NSEC_PER_SEC / 10)
+        }
+    }
+    
+    private func loadAllSymbols() async {
         guard !isFetchedAllSymbols else {
             return
         }
+        self.allSymbols = await self.decode("symbols.json")
+        self.isFetchedAllSymbols = true
+    }
+    
+    private func decode(_ file: String) async -> [String: Symbol] {
         await withCheckedContinuation { continuation in
-            Task.detached {
-                let symbols = await self.decode("symbols.json")
-                Task { @MainActor in
-                    self.allSymbols = symbols
-                    self.isFetchedAllSymbols = true
-                    continuation.resume()
+            DispatchQueue.global().async {
+                guard let url = Bundle.module.url(forResource: file, withExtension: nil) else {
+#if DEBUG
+                    fatalError("[Refine] Failed to locate \(file) in bundle.")
+#else
+                    continuation.resume(returning: [:])
+                    return
+#endif
                 }
+                guard let data = try? Data(contentsOf: url) else {
+#if DEBUG
+                    fatalError("[Refine] Failed to load \(file) from bundle.")
+#else
+                    continuation.resume(returning: [:])
+                    return
+#endif
+                }
+                let decoder = JSONDecoder()
+                guard let loaded = try? decoder.decode([Symbol].self, from: data) else {
+#if DEBUG
+                    fatalError("[Refine] Failed to decode \(file) from bundle.")
+#else
+                    continuation.resume(returning: [:])
+                    return
+#endif
+                }
+                var result: [String: Symbol] = [:]
+                for symbol in loaded {
+                    result[symbol.id] = symbol
+                }
+                continuation.resume(returning: result)
+                return
             }
         }
         
-    }
-    
-    private func decode(_ file: String) -> [String: Symbol] {
-        guard let url = Bundle.module.url(forResource: file, withExtension: nil) else {
-            #if DEBUG
-            fatalError("[Refine] Failed to locate \(file) in bundle.")
-            #else
-            return [:]
-            #endif
-        }
-        guard let data = try? Data(contentsOf: url) else {
-            #if DEBUG
-            fatalError("[Refine] Failed to load \(file) from bundle.")
-            #else
-            return [:]
-            #endif
-        }
-        let decoder = JSONDecoder()
-        guard let loaded = try? decoder.decode([Symbol].self, from: data) else {
-            #if DEBUG
-            fatalError("[Refine] Failed to decode \(file) from bundle.")
-            #else
-            return [:]
-            #endif
-        }
-        var result: [String: Symbol] = [:]
-        for symbol in loaded {
-            result[symbol.id] = symbol
-        }
-        return result
     }
     
 }
