@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/Platform_Compatibility-iOS15.0+-blue)
 ![](https://img.shields.io/badge/Swift_Compatibility-5.8-red)
 
-**Refine** is a framework for performing handwritten mathematical symbol recognition on the iOS platform. It is based on [DeTeXt](https://github.com/venkatasg/DeTeXt).
+**Refine** is a framework for performing **single** handwritten mathematical symbol recognition on the iOS platform. It is based on [DeTeXt](https://github.com/venkatasg/DeTeXt).
 
 ### Getting Started
 
